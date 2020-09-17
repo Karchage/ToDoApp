@@ -39,6 +39,58 @@ namespace ToDoApp.Controllers
             await context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> Detail(int? id)
+        {
+            if (id != null)
+            {
+                ToDo Todo = await context.ToDo.FirstOrDefaultAsync(p => p.Id == id);
+                if(Todo != null)
+                {
+                    return View(Todo);
+                }
+            }
+            return NotFound();
+        }
+
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if(id != null)
+            {
+                ToDo todo = await context.ToDo.FirstOrDefaultAsync(t => t.Id == id);
+                if(todo != null)
+                {
+                    return View(todo);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit (ToDo todo)
+        {
+            context.ToDo.Update(todo);
+            await context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if(id != null)
+            {
+                ToDo todo = new ToDo { Id = id.Value };
+                context.Entry(todo).State = EntityState.Deleted;
+                await context.SaveChangesAsync();
+                return RedirectToAction("Index");
+            }
+            return NotFound();
+        }
+
+
+
+
+
         public IActionResult Privacy()
         {
             return View();

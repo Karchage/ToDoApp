@@ -1,0 +1,14 @@
+﻿@model ToDoApp.Entity.ToDo
+@{
+    ViewBag.Title = Model.Id;
+}
+<h2>Пользователь @Model.Id</h2>
+<div>
+    <dl class="dl-horizontal">
+        <dt>Title</dt>
+        <dd>@Model.Title</dd>
+
+        <dt>Context</dt>
+        <dd>@Model.Context</dd>
+    </dl>
+</div>
