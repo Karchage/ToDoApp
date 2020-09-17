@@ -1,0 +1,22 @@
+﻿@model IEnumerable<ToDoApp.Entity.ToDo>
+@{
+    ViewBag.Title = "ToDo List";
+}
+<a asp-action="Create">New</a>
+<div class="text-center">
+    <table class="table-bordered">
+        <tr>
+            <td>Id</td>
+            <td>Title</td>
+            <td>Context</td>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Title</td>
+                <td>@item.Context</td>
+            </tr>
+        }
+    </table>
+</div>
