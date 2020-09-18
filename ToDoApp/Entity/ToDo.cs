@@ -14,9 +14,11 @@ namespace ToDoApp.Entity
         public DateTime DateCreate { get; set; }
         public DateTime DateDue { get; set; }
         public DateTime DateFor { get; set; }
+        public bool Done { get; set; }
 
         public ToDo()
         {
+            Done = false;
             DateCreate = DateTime.UtcNow;
         }
 
