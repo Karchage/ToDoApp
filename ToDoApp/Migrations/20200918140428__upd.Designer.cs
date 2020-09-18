@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToDoApp.Models;
 
 namespace ToDoApp.Migrations
 {
     [DbContext(typeof(EFDBContext))]
-    partial class EFDBContextModelSnapshot : ModelSnapshot
+    [Migration("20200918140428__upd")]
+    partial class _upd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,13 +31,13 @@ namespace ToDoApp.Migrations
                     b.Property<string>("Context")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateCreate")
+                    b.Property<DateTime?>("DateCreate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateDue")
+                    b.Property<DateTime?>("DateDue")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DateFor")
+                    b.Property<DateTime?>("DateFor")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("UserId")
