@@ -10,8 +10,8 @@ using ToDoApp.Models;
 namespace ToDoApp.Migrations
 {
     [DbContext(typeof(EFDBContext))]
-    [Migration("20200918140428__upd")]
-    partial class _upd
+    [Migration("20200918193952_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,13 +31,13 @@ namespace ToDoApp.Migrations
                     b.Property<string>("Context")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DateCreate")
+                    b.Property<DateTime>("DateCreate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DateDue")
+                    b.Property<DateTime>("DateDue")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DateFor")
+                    b.Property<DateTime>("DateFor")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("UserId")
