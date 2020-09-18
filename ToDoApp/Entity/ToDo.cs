@@ -9,7 +9,21 @@ namespace ToDoApp.Entity
     public class ToDo
     {
         public int Id { get; set; }
-        public string Title { get; set; }
+        public int? UserId { get; set; }
         public string Context { get; set; }
+        public DateTime DateCreate { get; set; }
+        public DateTime DateDue { get; set; }
+        public DateTime DateFor { get; set; }
+
+        public ToDo()
+        {
+            DateCreate = DateTime.UtcNow;
+        }
+
+        public DateTime GetDateDue(DateTime DateDue, DateTime DateFor)
+        {
+            DateDue = DateFor.Add(DateDue.TimeOfDay);
+            return DateDue;
+        }
     }
 }

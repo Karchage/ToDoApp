@@ -35,6 +35,7 @@ namespace ToDoApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(ToDo todo)
         {
+            todo.DateDue = todo.GetDateDue(todo.DateDue, todo.DateFor);
             context.ToDo.Add(todo);
             await context.SaveChangesAsync();
             return RedirectToAction("Index");

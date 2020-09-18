@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ToDoApp.Migrations
 {
-    public partial class _initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -10,14 +11,17 @@ namespace ToDoApp.Migrations
                 name: "ToDo",
                 columns: table => new
                 {
-                    id = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(nullable: true),
-                    Context = table.Column<string>(nullable: true)
+                    UserId = table.Column<int>(nullable: true),
+                    Context = table.Column<string>(nullable: true),
+                    DateCreate = table.Column<DateTime>(nullable: false),
+                    DateDue = table.Column<DateTime>(nullable: false),
+                    DateFor = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ToDo", x => x.id);
+                    table.PrimaryKey("PK_ToDo", x => x.Id);
                 });
         }
 
