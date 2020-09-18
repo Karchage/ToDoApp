@@ -13,7 +13,6 @@ namespace ToDoApp.Models
         public DbSet<ToDo> ToDo { get; set; }
         public EFDBContext(DbContextOptions<EFDBContext> options) :base(options)
         {
-            Database.EnsureCreated();
         }
     }
 }
