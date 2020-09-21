@@ -6,16 +6,21 @@
 <div class="text-center">
     <table class="table-bordered">
         <tr>
-            <td>Id</td>
-            <td>Title</td>
-            <td>Context</td>
-            <td>Actions</td>
+            <th>Id</th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.ContextSort">Context</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.DateCreateSort">DateCreate</a>
+            </th>
+            <th>Actions</th>
         </tr>
         @foreach (var item in Model)
         {
         <tr>
             <td>@item.Id</td>
             <td>@item.Context</td>
+            <td>@item.DateCreate</td>
             <td>
                 <a asp-action="Detail" asp-controller="Home" asp-route-Id="@item.Id">Detail </a>
                 <a asp-action="Edit" asp-controller="Home" asp-route-Id="@item.Id">Edit </a>

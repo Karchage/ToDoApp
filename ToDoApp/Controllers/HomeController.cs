@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ToDoApp.Entity;
+using ToDoApp.Enums;
 using ToDoApp.Models;
 
 namespace ToDoApp.Controllers
@@ -22,9 +24,23 @@ namespace ToDoApp.Controllers
             this.context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(SortStateToDo sortOrder = SortStateToDo.ContextAsc)
         {
-            return View(await context.ToDo.ToListAsync());
+            IQueryable<ToDo> todo = context.ToDo;
+            
+            ViewData["ContextSort"] = sortOrder == SortStateToDo.ContextAsc ? SortStateToDo.ContextDesc : SortStateToDo.ContextAsc;
+            ViewData["DateCreateSort"] = sortOrder == SortStateToDo.DateCreateAsc ? SortStateToDo.DateCreateDesc : SortStateToDo.DateCreateAsc;
+
+            todo = sortOrder switch
+            {
+                SortStateToDo.ContextDesc => todo.OrderByDescending(s => s.Context),
+                SortStateToDo.DateCreateAsc => todo.OrderBy(s => s.DateCreate),
+                SortStateToDo.DateCreateDesc => todo.OrderByDescending(s => s.DateCreate),
+                _ => todo.OrderBy(s => s.Context),
+
+            };
+
+            return View(await todo.AsNoTracking().ToListAsync());
         }
 
         public IActionResult Create() 
