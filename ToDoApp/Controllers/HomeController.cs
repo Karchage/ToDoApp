@@ -27,9 +27,6 @@ namespace ToDoApp.Controllers
         public async Task<IActionResult> Index(SortStateToDo sortOrder = SortStateToDo.ContextAsc)
         {
             IQueryable<ToDo> todo = context.ToDo;
-            
-            ViewData["ContextSort"] = sortOrder == SortStateToDo.ContextAsc ? SortStateToDo.ContextDesc : SortStateToDo.ContextAsc;
-            ViewData["DateCreateSort"] = sortOrder == SortStateToDo.DateCreateAsc ? SortStateToDo.DateCreateDesc : SortStateToDo.DateCreateAsc;
 
             todo = sortOrder switch
             {
@@ -39,8 +36,13 @@ namespace ToDoApp.Controllers
                 _ => todo.OrderBy(s => s.Context),
 
             };
+            IndexViewModel viewModel = new IndexViewModel
+            {
+                todo = await todo.AsNoTracking().ToListAsync(),
+                SortViewModel = new SortViewModel(sortOrder),
+            };
 
-            return View(await todo.AsNoTracking().ToListAsync());
+            return View(viewModel);
         }
 
         public IActionResult Create() 

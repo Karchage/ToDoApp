@@ -1,21 +1,54 @@
-﻿@model IEnumerable<ToDoApp.Entity.ToDo>
+﻿@using ToDoApp.Models
+@model IndexViewModel
+@addTagHelper *, ToDoApp
 @{
     ViewBag.Title = "ToDo List";
 }
+<style>
+    @@font-face {
+        font-family: 'FontAwesome';
+        src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal
+    }
+
+    .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale
+    }
+
+    .glyphicon-chevron-down:before {
+        content: "\f078";
+    }
+
+    .glyphicon-chevron-up:before {
+        content: "\f077";
+    }
+</style>
 <a asp-action="Create">New</a>
 <div class="text-center">
     <table class="table-bordered">
         <tr>
             <th>Id</th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewBag.ContextSort">Context</a>
+                <sort-header action="Index" up="@Model.SortViewModel.Up" 
+                             current="@Model.SortViewModel.Current" property="@Model.SortViewModel.ContextSort">
+                    Context
+                </sort-header>
             </th>
             <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewBag.DateCreateSort">DateCreate</a>
+                <sort-header action="Index" up="@Model.SortViewModel.Up"
+                             current="@Model.SortViewModel.Current" property="@Model.SortViewModel.DateCreateSort">
+                    DateCreate
+                </sort-header>
             </th>
             <th>Actions</th>
         </tr>
-        @foreach (var item in Model)
+        @foreach (var item in Model.todo)
         {
         <tr>
             <td>@item.Id</td>
