@@ -38,6 +38,9 @@ namespace ToDoApp.Migrations
                     b.Property<DateTime>("DateFor")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("Done")
+                        .HasColumnType("bit");
+
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
 

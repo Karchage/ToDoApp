@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ToDoApp.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Updatedatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,7 +17,8 @@ namespace ToDoApp.Migrations
                     Context = table.Column<string>(nullable: true),
                     DateCreate = table.Column<DateTime>(nullable: false),
                     DateDue = table.Column<DateTime>(nullable: false),
-                    DateFor = table.Column<DateTime>(nullable: false)
+                    DateFor = table.Column<DateTime>(nullable: false),
+                    Done = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {

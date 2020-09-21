@@ -10,8 +10,8 @@ using ToDoApp.Models;
 namespace ToDoApp.Migrations
 {
     [DbContext(typeof(EFDBContext))]
-    [Migration("20200918195508_Initi")]
-    partial class Initi
+    [Migration("20200921124632_Update database")]
+    partial class Updatedatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,6 +39,9 @@ namespace ToDoApp.Migrations
 
                     b.Property<DateTime>("DateFor")
                         .HasColumnType("datetime2");
+
+                    b.Property<bool>("Done")
+                        .HasColumnType("bit");
 
                     b.Property<int?>("UserId")
                         .HasColumnType("int");
