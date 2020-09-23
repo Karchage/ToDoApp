@@ -15,18 +15,18 @@ namespace ToDoApp.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly EFDBContext context;
+        private readonly EFDBContext db;
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger, EFDBContext context)
         {
             _logger = logger;
-            this.context = context;
+            this.db = context;
         }
 
-        public async Task<IActionResult> Index(SortStateToDo sortOrder = SortStateToDo.ContextAsc)
+        public async Task<IActionResult> Index(string? datecreates, string? context, SortStateToDo sortOrder = SortStateToDo.ContextAsc)
         {
-            IQueryable<ToDo> todo = context.ToDo;
+            IQueryable<ToDo> todo = db.ToDo;
 
             todo = sortOrder switch
             {
@@ -36,15 +36,32 @@ namespace ToDoApp.Controllers
                 _ => todo.OrderBy(s => s.Context),
 
             };
-            IndexViewModel viewModel = new IndexViewModel
+            IndexViewModel indexviewModel = new IndexViewModel
             {
                 todo = await todo.AsNoTracking().ToListAsync(),
                 SortViewModel = new SortViewModel(sortOrder),
             };
 
+            if (datecreates != null && Convert.ToDateTime(datecreates) != new DateTime(0).Date)
+            {
+                todo = todo.Where(p => p.DateCreate.Date == Convert.ToDateTime(datecreates).Date);
+            }
+            if (!String.IsNullOrEmpty(context))
+            {
+                todo = todo.Where(p => p.Context.Contains(context));
+            }
+            List<string> dateCreate = db.ToDo.Select(p => p.DateCreate.Date.ToString("dd/MM/yyyy")).Distinct().ToList();
+            dateCreate.Insert(0, new DateTime(0).Date.ToString("dd/MM/yyyy"));
+            ToDoListViewModel viewModel = new ToDoListViewModel
+            {
+                Todos = todo.ToList(),
+                DateCreates = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(dateCreate),
+                Context = context,
+                IndexViewModel = indexviewModel,
+            };
+
             return View(viewModel);
         }
-
         public IActionResult Create() 
         {
             return View();
@@ -54,8 +71,8 @@ namespace ToDoApp.Controllers
         public async Task<IActionResult> Create(ToDo todo)
         {
             todo.DateDue = todo.GetDateDue(todo.DateDue, todo.DateFor);
-            context.ToDo.Add(todo);
-            await context.SaveChangesAsync();
+            db.ToDo.Add(todo);
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -63,7 +80,7 @@ namespace ToDoApp.Controllers
         {
             if (id != null)
             {
-                ToDo Todo = await context.ToDo.FirstOrDefaultAsync(p => p.Id == id);
+                ToDo Todo = await db.ToDo.FirstOrDefaultAsync(p => p.Id == id);
                 if(Todo != null)
                 {
                     return View(Todo);
@@ -76,7 +93,7 @@ namespace ToDoApp.Controllers
         {
             if(id != null)
             {
-                ToDo todo = await context.ToDo.FirstOrDefaultAsync(t => t.Id == id);
+                ToDo todo = await db.ToDo.FirstOrDefaultAsync(t => t.Id == id);
                 if(todo != null)
                 {
                     return View(todo);
@@ -88,8 +105,8 @@ namespace ToDoApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit (ToDo todo)
         {
-            context.ToDo.Update(todo);
-            await context.SaveChangesAsync();
+            db.ToDo.Update(todo);
+            await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 
@@ -99,15 +116,12 @@ namespace ToDoApp.Controllers
             if(id != null)
             {
                 ToDo todo = new ToDo { Id = id.Value };
-                context.Entry(todo).State = EntityState.Deleted;
-                await context.SaveChangesAsync();
+                db.Entry(todo).State = EntityState.Deleted;
+                await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return NotFound();
         }
-
-
-
 
 
         public IActionResult Privacy()
