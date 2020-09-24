@@ -1,6 +1,6 @@
 ﻿@using ToDoApp.Models
-@model ToDoListViewModel
-@addTagHelper *, ToDoApp
+@model IndexViewModel
+@*@addTagHelper *, ToDoApp*@
 @{
     ViewBag.Title = "ToDo List";
 }
@@ -57,10 +57,10 @@
 <div class="text-center">
     <form method="get">
         <label class="control-label">Название:</label>
-        <input name="context" class="form-control" />
+        <input name="context" class="form-control" value="@Model.FilterViewModel.SelectedContext" />
 
         <label class="control-label">Дата:</label>
-        <select name="datecreates" asp-items="Model.DateCreates" class="form-control"></select>
+        <select name="datecreate" asp-items="Model.FilterViewModel.DateCreates" class="form-control"></select>
 
         <input type="submit" value="Filter" class="btn btn-success" />
     </form>
@@ -69,20 +69,24 @@
         <tr>
             <th>Id</th>
             <th>
-                <sort-header action="Index" up="@Model.IndexViewModel.SortViewModel.Up"
-                             current="@Model.IndexViewModel.SortViewModel.Current" property="@Model.IndexViewModel.SortViewModel.ContextSort">
+                <a asp-action="Index"
+                   asp-route-sortOrder="@(Model.SortViewModel.ContextSort)"
+                   asp-route-context="@(Model.FilterViewModel.SelectedContext)"
+                   asp-route-datecreate="@(Model.FilterViewModel.SelectedDate)">
                     Context
-                </sort-header>
+                </a>
             </th>
             <th>
-                <sort-header action="Index" up="@Model.IndexViewModel.SortViewModel.Up"
-                             current="@Model.IndexViewModel.SortViewModel.Current" property="@Model.IndexViewModel.SortViewModel.DateCreateSort">
+                <a asp-action ="Index"
+                   asp-route-sortOrder="@(Model.SortViewModel.DateCreateSort)"
+                   asp-route-context="@(Model.FilterViewModel.SelectedContext)"
+                   asp-route-datecreate="@(Model.FilterViewModel.SelectedDate)">
                     DateCreate
-                </sort-header>
-            </th>
+                    </a>
+</th>
             <th>Actions</th>
         </tr>
-        @foreach (var item in Model.Todos)
+        @foreach (var item in Model.todo)
         {
             <tr>
                 <td>@item.Id</td>
@@ -97,24 +101,29 @@
         }
     </table>
 </div>
-@if (Model.IndexViewModel.PageViewModel.HasPreviousPage)
+@if (Model.PageViewModel.HasPreviousPage)
 {
     <a asp-action="Index"
-       asp-route-page="@(Model.IndexViewModel.PageViewModel.PageNumber - 1)"
+       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
+       asp-route-context="@(Model.FilterViewModel.SelectedContext)"
+       asp-route-datecreate="@(Model.FilterViewModel.SelectedDate)"
+       asp-route-sortorder="@(Model.SortViewModel.Current)"
        class="btn btn-outline-dark">
         <i class="glyphicon glyphicon-chevron-left"></i>
         Назад
     </a>
 }
 
-@if (Model.IndexViewModel.PageViewModel.HasNextPage)
+@if (Model.PageViewModel.HasNextPage)
 {
     <a asp-action="Index"
-       asp-route-page="@(Model.IndexViewModel.PageViewModel.PageNumber + 1)"
+       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
+       asp-route-context="@(Model.FilterViewModel.SelectedContext)"
+       asp-route-datecreate="@(Model.FilterViewModel.SelectedDate)"
+       asp-route-sortorder="@(Model.SortViewModel.Current)"
        class="btn btn-outline-dark">
         Вперед
         <i class="glyphicon glyphicon-chevron-right"></i>
     </a>
 }
-<page-link page-view-model="Model.IndexViewModel.PageViewModel" page-action="Index"></page-link>
 

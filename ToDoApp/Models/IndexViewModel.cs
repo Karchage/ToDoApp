@@ -12,5 +12,6 @@ namespace ToDoApp.Models
         public IEnumerable<ToDo> todo { get; set; }
         public SortViewModel SortViewModel { get; set; }
         public PageViewModel PageViewModel { get; set; }
+        public FilterViewModel FilterViewModel { get; set; }
     }
 }

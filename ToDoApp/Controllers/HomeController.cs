@@ -24,50 +24,46 @@ namespace ToDoApp.Controllers
             this.db = context;
         }
 
-        public async Task<IActionResult> Index(string datecreates, string context, SortStateToDo sortOrder = SortStateToDo.ContextAsc, int page = 1)
+        public async Task<IActionResult> Index(string datecreate, string context, SortStateToDo sortOrder = SortStateToDo.ContextAsc, int page = 1)
         {
             int pageSize = 3;
 
             IQueryable<ToDo> todo = db.ToDo;
-
-
-            var count = await todo.CountAsync();
-            IQueryable<ToDo> items = todo.Skip((page - 1) * pageSize).Take(pageSize);
-            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
-            items = sortOrder switch
+            //filtr
+            if (datecreate != null && Convert.ToDateTime(datecreate) != new DateTime(0).Date)
             {
-                SortStateToDo.ContextDesc => items.OrderByDescending(s => s.Context),
-                SortStateToDo.DateCreateAsc => items.OrderBy(s => s.DateCreate),
-                SortStateToDo.DateCreateDesc => items.OrderByDescending(s => s.DateCreate),
-                _ => items.OrderBy(s => s.Context),
-
-            };
-            IndexViewModel indexviewModel = new IndexViewModel
-            {
-                todo = items,
-                SortViewModel = new SortViewModel(sortOrder),
-                PageViewModel = pageViewModel
-            };
-            DateTime now = DateTime.Now;
-            if (datecreates != null && Convert.ToDateTime(datecreates) != new DateTime(0).Date)
-            {
-                items = items.Where(p => p.DateCreate.Date == Convert.ToDateTime(datecreates).Date);
+                todo = todo.Where(p => p.DateCreate.Date == Convert.ToDateTime(datecreate).Date);
             }
             if (!String.IsNullOrEmpty(context))
             {
-                items = items.Where(p => p.Context.Contains(context));
+                todo = todo.Where(p => p.Context.Contains(context));
             }
-            List<string> dateCreate = db.ToDo.Select(p => p.DateCreate.Date.ToString("dd/MM/yyyy")).Distinct().ToList();
-            dateCreate.Insert(0, new DateTime(0).Date.ToString("dd/MM/yyyy"));
-            ToDoListViewModel viewModel = new ToDoListViewModel
+
+            //sort
+            todo = sortOrder switch
             {
-                Todos = items.ToList(),
-                DateCreates = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(dateCreate),
-                Context = context,
-                IndexViewModel = indexviewModel,
+                SortStateToDo.ContextDesc => todo.OrderByDescending(s => s.Context),
+                SortStateToDo.DateCreateAsc => todo.OrderBy(s => s.DateCreate),
+                SortStateToDo.DateCreateDesc => todo.OrderByDescending(s => s.DateCreate),
+                _ => todo.OrderBy(s => s.Context),
+
             };
 
-            return View(viewModel);
+            //page
+            var count = await todo.CountAsync();
+            IQueryable<ToDo> items = todo.Skip((page - 1) * pageSize).Take(pageSize);
+            var dateForFilter = db.ToDo.Select(p => p.DateCreate.Date.ToString("dd/MM/yyyy")).Distinct().ToList();
+            
+            //create view
+            IndexViewModel indexViewModel = new IndexViewModel
+            {
+                todo = items,
+                PageViewModel = new PageViewModel(count, page,pageSize),
+                FilterViewModel = new FilterViewModel(dateForFilter, datecreate, context),
+                SortViewModel = new SortViewModel(sortOrder)
+
+            };
+            return View(indexViewModel);
         }
         public IActionResult Create() 
         {
