@@ -106,6 +106,7 @@
         Назад
     </a>
 }
+
 @if (Model.IndexViewModel.PageViewModel.HasNextPage)
 {
     <a asp-action="Index"
@@ -115,3 +116,5 @@
         <i class="glyphicon glyphicon-chevron-right"></i>
     </a>
 }
+<page-link page-view-model="Model.IndexViewModel.PageViewModel" page-action="Index"></page-link>
+
