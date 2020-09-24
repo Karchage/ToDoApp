@@ -1,6 +1,6 @@
 ﻿@using ToDoApp.Models
 @model IndexViewModel
-@*@addTagHelper *, ToDoApp*@
+@addTagHelper *, ToDoApp
 @{
     ViewBag.Title = "ToDo List";
 }
@@ -101,29 +101,11 @@
         }
     </table>
 </div>
-@if (Model.PageViewModel.HasPreviousPage)
-{
-    <a asp-action="Index"
-       asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-       asp-route-context="@(Model.FilterViewModel.SelectedContext)"
-       asp-route-datecreate="@(Model.FilterViewModel.SelectedDate)"
-       asp-route-sortorder="@(Model.SortViewModel.Current)"
-       class="btn btn-outline-dark">
-        <i class="glyphicon glyphicon-chevron-left"></i>
-        Назад
-    </a>
-}
-
-@if (Model.PageViewModel.HasNextPage)
-{
-    <a asp-action="Index"
-       asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-       asp-route-context="@(Model.FilterViewModel.SelectedContext)"
-       asp-route-datecreate="@(Model.FilterViewModel.SelectedDate)"
-       asp-route-sortorder="@(Model.SortViewModel.Current)"
-       class="btn btn-outline-dark">
-        Вперед
-        <i class="glyphicon glyphicon-chevron-right"></i>
-    </a>
-}
-
+<page-link
+    page-view-model="@Model.PageViewModel"
+    page-action="Index"
+    page-url-context="@(Model.FilterViewModel.SelectedContext)"
+    page-url-datecreate="@(Model.FilterViewModel.SelectedDate)"
+    page-url-sortorder="@(Model.SortViewModel.Current)">
+</page-link>
+       
