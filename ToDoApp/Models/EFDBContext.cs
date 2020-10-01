@@ -11,6 +11,7 @@ namespace ToDoApp.Models
     public class EFDBContext : DbContext
     {
         public DbSet<ToDo> ToDo { get; set; }
+        public DbSet<User> User { get; set; }
         public EFDBContext(DbContextOptions<EFDBContext> options) :base(options)
         {
         }

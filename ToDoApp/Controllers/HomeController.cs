@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,7 @@ namespace ToDoApp.Controllers
             this.db = context;
         }
 
+        [Authorize]
         public async Task<IActionResult> Index(string datecreate, string context, SortStateToDo sortOrder = SortStateToDo.ContextAsc, int page = 1)
         {
             int pageSize = 3;
@@ -65,12 +67,14 @@ namespace ToDoApp.Controllers
             };
             return View(indexViewModel);
         }
+        [Authorize]
         public IActionResult Create() 
         {
             return View();
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create(ToDo todo)
         {
             todo.DateDue = todo.GetDateDue(todo.DateDue, todo.DateFor);
@@ -79,6 +83,7 @@ namespace ToDoApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize]
         public async Task<IActionResult> Detail(int? id)
         {
             if (id != null)
@@ -91,7 +96,7 @@ namespace ToDoApp.Controllers
             }
             return NotFound();
         }
-
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if(id != null)
@@ -106,6 +111,7 @@ namespace ToDoApp.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Edit (ToDo todo)
         {
             db.ToDo.Update(todo);
@@ -113,7 +119,7 @@ namespace ToDoApp.Controllers
             return RedirectToAction("Index");
         }
 
-        
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if(id != null)
