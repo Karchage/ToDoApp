@@ -6,8 +6,9 @@
     <div class="form-group">
         <label asp-for="Context" class="control-label">Context</label>
         <input type="text" asp-for="Context" class="form-control" />
+
     </div>
     <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-default" />
+        <input type="submit" value="Save" class="btn btn-default" data="@Model" />
     </div>
 </form>

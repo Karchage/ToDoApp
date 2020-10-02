@@ -2,11 +2,16 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Logging;
 using ToDoApp.Entity;
 using ToDoApp.Enums;
@@ -25,12 +30,12 @@ namespace ToDoApp.Controllers
             this.db = context;
         }
 
+        
         [Authorize]
         public async Task<IActionResult> Index(string datecreate, string context, SortStateToDo sortOrder = SortStateToDo.ContextAsc, int page = 1)
         {
             int pageSize = 3;
-
-            IQueryable<ToDo> todo = db.ToDo;
+            IQueryable<ToDo> todo = db.ToDo.Where(u => u.LoginUser == User.Identity.Name);
             //filtr
             if (datecreate != null && Convert.ToDateTime(datecreate) != new DateTime(0).Date)
             {
@@ -78,7 +83,10 @@ namespace ToDoApp.Controllers
         public async Task<IActionResult> Create(ToDo todo)
         {
             todo.DateDue = todo.GetDateDue(todo.DateDue, todo.DateFor);
+            todo.Done = false;
+            todo.DateCreate = DateTime.UtcNow;
             db.ToDo.Add(todo);
+            todo.LoginUser = User.Identity.Name;
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
@@ -89,10 +97,11 @@ namespace ToDoApp.Controllers
             if (id != null)
             {
                 ToDo Todo = await db.ToDo.FirstOrDefaultAsync(p => p.Id == id);
-                if(Todo != null)
+                if (Todo != null && Todo.LoginUser == User.Identity.Name)
                 {
                     return View(Todo);
                 }
+                else return NotFound();
             }
             return NotFound();
         }
@@ -102,10 +111,11 @@ namespace ToDoApp.Controllers
             if(id != null)
             {
                 ToDo todo = await db.ToDo.FirstOrDefaultAsync(t => t.Id == id);
-                if(todo != null)
+                if(todo != null && todo.LoginUser == User.Identity.Name)
                 {
                     return View(todo);
                 }
+                else return NotFound();
             }
             return NotFound();
         }
@@ -114,7 +124,9 @@ namespace ToDoApp.Controllers
         [Authorize]
         public async Task<IActionResult> Edit (ToDo todo)
         {
-            db.ToDo.Update(todo);
+            ToDo origTodo = db.ToDo.FirstOrDefault(u => u.Id == todo.Id);
+            origTodo.Context = todo.Context;
+            db.ToDo.Update(origTodo);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }
@@ -124,10 +136,13 @@ namespace ToDoApp.Controllers
         {
             if(id != null)
             {
-                ToDo todo = new ToDo { Id = id.Value };
-                db.Entry(todo).State = EntityState.Deleted;
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                ToDo todo = db.ToDo.Find(id);
+                if(todo.LoginUser == User.Identity.Name)
+                {
+                    db.Entry(todo).State = EntityState.Deleted;
+                    await db.SaveChangesAsync();
+                    return RedirectToAction("Index");
+                }
             }
             return NotFound();
         }
