@@ -32,14 +32,14 @@ namespace ToDoApp.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginModel model)
+        public async Task<IActionResult> Login(LoginAndRegisterModel model)
         {
             if(ModelState.IsValid)
             {
-                User user = await context.User.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+                User user = await context.User.FirstOrDefaultAsync(u => u.Email == model.loginModel.Email && u.Password == model.loginModel.Password);
                 if(user !=null)
                 {
-                    await Authenticate(model.Email);
+                    await Authenticate(model.loginModel.Email);
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", "Некорректные логин или пароль");
@@ -47,24 +47,20 @@ namespace ToDoApp.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> Register(LoginAndRegisterModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = await context.User.FirstOrDefaultAsync(u => u.Email == model.Email);
+                User user = await context.User.FirstOrDefaultAsync(u => u.Email == model.registerModel.Email);
                 if (user == null)
                 {
-                    context.User.Add(new Entity.User { Email = model.Email, Name = model.Name, Password = model.Password });
+                    context.User.Add(new Entity.User { Email = model.registerModel.Email, Name = model.registerModel.Name, Password = model.registerModel.Password });
                     await context.SaveChangesAsync();
 
-                    await Authenticate(model.Email);
+                    await Authenticate(model.registerModel.Email);
                     return RedirectToAction("Index", "Home");
                 }
             }

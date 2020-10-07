@@ -1,0 +1,137 @@
+@import "_color";
+
+body{
+    display: flex;
+    margin: 0;
+    color: @primaryTextColor;
+}
+.left-panel{
+    background-color: @primaryColor;
+    width: 15%;
+    height: 100vh;
+    .profile{
+        margin-top: 1rem;
+        border-bottom: 1px solid @dividerColor;
+        .profile-name{
+            text-align: center;
+            font-weight: 600;
+        }
+        a{
+            display: block;
+            text-align: center;
+            color:@textPrimaryColor;
+            text-decoration: none;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+    }
+    .menu{
+        margin-top: 1vh;
+        border-bottom: 1px solid @dividerColor;
+        display: flex;
+        flex-direction: column;
+        ul{
+            list-style-type: none;
+            padding: 0;
+            li{
+                height: 3vh;
+                text-align: center; 
+            }
+            li:hover{
+                background-color: @darkPrimaryColor;
+                transform: scaleX(1.05);
+            }
+        }
+        a{
+            color:@textPrimaryColor;
+            text-decoration: none;
+            font-weight: bold;
+        }
+    }
+}
+.this-day-date{
+    text-align: center;
+    padding: 5px 0px;
+}
+.content{
+    background-color: @lightPrimaryColor;
+    width: 85%;
+    height: 100vh;
+    
+    .card{
+        display: flex;
+        color: @primaryTextColor;
+        border-bottom: 1px solid @primaryColor;
+        margin: 1vh;
+    }
+}
+.this-day, .next-day{
+        position: absolute;
+        display: inline-block;
+        background-color: @textPrimaryColor;
+        border: 1px solid none;
+        border-radius: 5px;
+        min-width: 30%;
+        min-height: 20vh;
+        margin: 5vh 3vw 1vh 3vw;
+}
+
+.next-day{
+
+    margin-left: calc(30% + 10vw);
+    .title{
+        text-align: center;
+    }
+    
+}
+.search-date{
+    justify-content: start;
+    button{
+        padding: 0;
+        width: 15px;
+        height: 15px;
+        img{
+            width: 15px;
+            height: 15px;
+        }
+    }
+}
+.plus{
+    position: absolute;
+    left: calc(100% - 15px);
+    top: -15px;
+    &:hover{
+        transform: scale(1.1);
+        transition: 0.3s;
+    }
+    img{
+        width: 30px;
+        height: 30px;
+    }
+}
+.nav-button{
+    display: flex;
+    margin: 1vh;
+    img{
+        width: 30px;
+        height: 30px;
+    }
+    a{
+        margin-left: auto;
+        margin-right: auto;
+        color:@secondaryTextColor;
+        text-decoration: none;
+        &:first-child:hover{
+            transform: translateX(-1px);
+            transition: 0.3s;
+        }
+        &:last-child:hover{
+            transform: translateX(1px);
+            transition: 0.3s;
+        }
+
+    }   
+}
