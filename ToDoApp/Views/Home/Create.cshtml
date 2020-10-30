@@ -2,20 +2,22 @@
 @{
     ViewBag.Title = "Добавление TODO";
 }
+<div>
     <form asp-action="create" asp-controller="home">
-        <div class="form-group">
-            <label asp-for="Context" class="control-label">Context</label>
-            <input type="text" asp-for="Context" class="form-control" />
+        <div>
+            <label asp-for="Context">Context</label>
+            <input type="text" asp-for="Context" />
         </div>
-        <div class="form-group">
+        <div>
             <label asp-for="DateDue" class="control-label">DateDue</label>
-            <input type="time" asp-for="DateDue" class="form-control" />
+            <input type="time" asp-for="DateDue" />
         </div>
-        <div class="form-group">
-            <label asp-for="DateFor" class="control-label">DateFor</label>
-            <input type="date" asp-for="DateFor" class="form-control" />
+        <div>
+            <label asp-for="DateFor">DateFor</label>
+            <input type="date" asp-for="DateFor" />
         </div>
-        <div class="form-group">
-            <input type="submit" value="Отправить" class="btn btn-default" />
+        <div>
+            <input type="submit" value="Отправить" />
         </div>
     </form>
+</div>

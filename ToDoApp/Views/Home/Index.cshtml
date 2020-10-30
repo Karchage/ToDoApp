@@ -4,108 +4,159 @@
 @{
     ViewBag.Title = "ToDo List";
 }
-<style>
-    @@font-face {
-        font-family: 'FontAwesome';
-        src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal
-    }
-
-    .glyphicon {
-        display: inline-block;
-        font: normal normal normal 14px/1 FontAwesome;
-        font-size: inherit;
-        text-rendering: auto;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale
-    }
-
-    .glyphicon-chevron-down:before {
-        content: "\f078";
-    }
-
-    .glyphicon-chevron-up:before {
-        content: "\f077";
-    }
-
-    @@font-face {
-        font-family: 'FontAwesome';
-        src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal
-    }
-
-    .glyphicon {
-        display: inline-block;
-        font: normal normal normal 14px/1 FontAwesome;
-        font-size: inherit;
-        text-rendering: auto;
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale
-    }
-
-    .glyphicon-chevron-right:before {
-        content: "\f054";
-    }
-
-    .glyphicon-chevron-left:before {
-        content: "\f053";
-    }
-</style>
-<a asp-action="Create">New</a>
-<div class="text-center">
-    <form method="get">
-        <label class="control-label">Название:</label>
-        <input name="context" class="form-control" value="@Model.FilterViewModel.SelectedContext" />
-
-        <label class="control-label">Дата:</label>
-        <select name="datecreate" asp-items="Model.FilterViewModel.DateCreates" class="form-control"></select>
-
-        <input type="submit" value="Filter" class="btn btn-success" />
-    </form>
-
-    <table class="table-bordered">
-        <tr>
-            <th>Id</th>
-            <th>
-                <a asp-action="Index"
-                   asp-route-sortOrder="@(Model.SortViewModel.ContextSort)"
-                   asp-route-context="@(Model.FilterViewModel.SelectedContext)"
-                   asp-route-datecreate="@(Model.FilterViewModel.SelectedDate)">
-                    Context
-                </a>
-            </th>
-            <th>
-                <a asp-action ="Index"
-                   asp-route-sortOrder="@(Model.SortViewModel.DateCreateSort)"
-                   asp-route-context="@(Model.FilterViewModel.SelectedContext)"
-                   asp-route-datecreate="@(Model.FilterViewModel.SelectedDate)">
-                    DateCreate
-                    </a>
-</th>
-            <th>Actions</th>
-        </tr>
+<div class="this-day">
+    <a class="plus" asp-controller="Home" asp-action="Create"><img src="https://img.icons8.com/cotton/64/000000/plus--v3.png" /></a>
+    <div class="this-day-date">@DateTime.Now.Date.ToShortDateString()</div>
+    @if (Model.todo.Count() > 0)
+    {
+        var checkTodoForDay = false;
         @foreach (var item in Model.todo)
         {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Context</td>
-                <td>@item.DateCreate</td>
-                <td>
-                    <a asp-action="Detail" asp-controller="Home" asp-route-Id="@item.Id">Detail </a>
-                    <a asp-action="Edit" asp-controller="Home" asp-route-Id="@item.Id">Edit </a>
-                    <a asp-action="Delete" asp-controller="Home" asp-route-Id="@item.Id" method="delete">Delete</a>
-                </td>
-            </tr>
+            @if (item.DateFor == @DateTime.Now.Date)
+            {
+                checkTodoForDay = true;
+                <div class="card">
+                    <input type="checkbox" value="@item.Done">
+                    <div>@item.Context</div>
+                </div>
+            }
+            else
+            {
+                checkTodoForDay = false;
+            }
         }
-    </table>
+        @if (checkTodoForDay == false)
+        {
+            <div class="card">
+                <div> Список дел на сегодня пуст.</div>
+            </div>
+        }
+    }
+    else
+    {
+        <div style="text-align:center">Создайте новые дела, ваш список пуст.</div>
+    }
+
+
+
 </div>
-<page-link
-    page-view-model="@Model.PageViewModel"
-    page-action="Index"
-    page-url-context="@(Model.FilterViewModel.SelectedContext)"
-    page-url-datecreate="@(Model.FilterViewModel.SelectedDate)"
-    page-url-sortorder="@(Model.SortViewModel.Current)">
-</page-link>
-       
+<div class="next-day">
+    <div class="title">Next-Day</div>
+    <a class="plus" href="#"><img src="https://img.icons8.com/cotton/64/000000/plus--v3.png" /></a>
+    <div class="card search-date">
+        <input type="date">
+        <button><img src="https://img.icons8.com/cotton/64/000000/search--v2.png" /></button>
+    </div>
+    <div class="card">
+        <input type="checkbox">
+        <div>Create page 2</div>
+    </div>
+    <div class="nav-button">
+        <a href="#"><img src="https://img.icons8.com/cotton/64/000000/circled-left--v1.png" /></a>
+        <a href="#"><img src="https://img.icons8.com/cotton/64/000000/circled-right--v2.png" /></a>
+    </div>
+</div>
+@*<style>
+        @@font-face {
+            font-family: 'FontAwesome';
+            src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal
+        }
+
+        .glyphicon {
+            display: inline-block;
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale
+        }
+
+        .glyphicon-chevron-down:before {
+            content: "\f078";
+        }
+
+        .glyphicon-chevron-up:before {
+            content: "\f077";
+        }
+
+        @@font-face {
+            font-family: 'FontAwesome';
+            src: url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal
+        }
+
+        .glyphicon {
+            display: inline-block;
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale
+        }
+
+        .glyphicon-chevron-right:before {
+            content: "\f054";
+        }
+
+        .glyphicon-chevron-left:before {
+            content: "\f053";
+        }
+    </style>
+    <a asp-action="Create">New</a>
+    <div class="text-center">
+        <form method="get">
+            <label class="control-label">Название:</label>
+            <input name="context" class="form-control" value="@Model.FilterViewModel.SelectedContext" />
+
+            <label class="control-label">Дата:</label>
+            <select name="datecreate" asp-items="Model.FilterViewModel.DateCreates" class="form-control"></select>
+
+            <input type="submit" value="Filter" class="btn btn-success" />
+        </form>
+
+        <table class="table-bordered">
+            <tr>
+                <th>Id</th>
+                <th>
+                    <a asp-action="Index"
+                       asp-route-sortOrder="@(Model.SortViewModel.ContextSort)"
+                       asp-route-context="@(Model.FilterViewModel.SelectedContext)"
+                       asp-route-datecreate="@(Model.FilterViewModel.SelectedDate)">
+                        Context
+                    </a>
+                </th>
+                <th>
+                    <a asp-action ="Index"
+                       asp-route-sortOrder="@(Model.SortViewModel.DateCreateSort)"
+                       asp-route-context="@(Model.FilterViewModel.SelectedContext)"
+                       asp-route-datecreate="@(Model.FilterViewModel.SelectedDate)">
+                        DateCreate
+                        </a>
+    </th>
+                <th>Actions</th>
+            </tr>
+            @foreach (var item in Model.todo)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Context</td>
+                    <td>@item.DateCreate</td>
+                    <td>
+                        <a asp-action="Detail" asp-controller="Home" asp-route-Id="@item.Id">Detail </a>
+                        <a asp-action="Edit" asp-controller="Home" asp-route-Id="@item.Id">Edit </a>
+                        <a asp-action="Delete" asp-controller="Home" asp-route-Id="@item.Id" method="delete">Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <page-link
+        page-view-model="@Model.PageViewModel"
+        page-action="Index"
+        page-url-context="@(Model.FilterViewModel.SelectedContext)"
+        page-url-datecreate="@(Model.FilterViewModel.SelectedDate)"
+        page-url-sortorder="@(Model.SortViewModel.Current)">
+    </page-link>*@

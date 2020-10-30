@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="compilerconfig.json" />
     <Content Remove="wwwroot\js\dist\main.dev.js" />
     <Content Remove="wwwroot\js\main.js" />
   </ItemGroup>
@@ -30,6 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="compilerconfig.json" />
     <None Include="wwwroot\js\dist\main.dev.js" />
     <None Include="wwwroot\js\main.js" />
     <None Include="wwwroot\Less\dist\style.css" />
