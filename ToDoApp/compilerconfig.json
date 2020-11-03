@@ -1,1 +1,18 @@
-[]
+﻿[
+  {
+    "outputFile": "wwwroot/Less/_color.css",
+    "inputFile": "wwwroot/Less/_color.less"
+  },
+  {
+    "outputFile": "wwwroot/Less/create.css",
+    "inputFile": "wwwroot/Less/create.less"
+  },
+  {
+    "outputFile": "wwwroot/Less/style.css",
+    "inputFile": "wwwroot/Less/style.less"
+  },
+  {
+    "outputFile": "wwwroot/Less/stylemain.css",
+    "inputFile": "wwwroot/Less/stylemain.less"
+  }
+]

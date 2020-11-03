@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\Less\create.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.8">
@@ -34,9 +38,6 @@
     <None Include="compilerconfig.json" />
     <None Include="wwwroot\js\dist\main.dev.js" />
     <None Include="wwwroot\js\main.js" />
-    <None Include="wwwroot\Less\dist\style.css" />
-    <None Include="wwwroot\Less\dist\stylemain.css" />
-    <None Include="wwwroot\Less\dist\_color.css" />
     <None Include="wwwroot\Less\style.less" />
     <None Include="wwwroot\Less\stylemain.less" />
     <None Include="wwwroot\Less\_color.less" />
